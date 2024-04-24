@@ -1,18 +1,19 @@
 import torch
 
-class GradientDescentOptimizer:
-    def __init__(self, learning_rate, w):
-        self.learning_rate = learning_rate
-        self.w = None
 
-    def optimize(self, model, loss, X, y):
-        if self.w == None:
-            self.w = torch.rand((X.size()[1]))
-        # Compute the gradient of the loss with respect to the model parameters
-        gradient = model.gradient(loss, X, y)
-        # Update the model parameters
-        model.update(gradient, self.learning_rate)
+class GradientDescentOptimizer:
+    def __init__(self, model, w):
+        self.model = model
+        self.w = None
     
-    def step(self, model, loss, X, y):
-        self.optimize(model, loss, X, y)
+    def step(self, alpha, beta, w):
+        if self.w == None:
+            self.old_w = self.model.w.clone()
+
+        old_w = self.model.w.clone()
+        
+        current_w = self.w - alpha * self.grad * self.w + beta * (self.w - old_w)
+        return current_w
+        
+
         
