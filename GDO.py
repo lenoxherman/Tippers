@@ -6,14 +6,14 @@ class GradientDescentOptimizer:
         self.model = model
         self.w = None
     
-    def step(self, alpha, beta, w):
+    def step(self, alpha, beta, X, y, w):
+        #taken from Daniela's logistic regression
         if self.w == None:
             self.old_w = self.model.w.clone()
-
-        old_w = self.model.w.clone()
         
-        current_w = self.w - alpha * self.grad * self.w + beta * (self.w - old_w)
-        return current_w
+        current_w = self.model.w.clone()
+        self.model.w = self.model.w - self.model.grad(X, y).flatten() * alpha + beta * (self.model.w - self.old_w)
+        self.old_w = current_w
         
 
         
