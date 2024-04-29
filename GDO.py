@@ -68,6 +68,7 @@ class LogisticRegression(LinearModel):
         Returns: torch.Tensor: The logistic loss value
         """
         if self.w is None:
+            print(X.shape)
             #gives a random value to w
             self.w = torch.rand((X.size()[1]))
         s = X @ self.w
