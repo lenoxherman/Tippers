@@ -71,11 +71,7 @@ class LogisticRegression(LinearModel):
             #gives a random value to w
             self.w = torch.rand((X.size()[1]))
         s = X @ self.w
-        #sigmas turning to one, which then log(1-1) is zero so gives infinity--> look at only first 25 indices before the 1.0 starts
-        #s = s[:25]
-        #print("s: ", s)
         sigma_s = 1 / (1 + torch.exp(-s))
-        #print("sigma s: ", sigma_s)
         logistic_loss = torch.mean(-y * torch.log(sigma_s) - (1 - y) * torch.log(1 - sigma_s))
         return logistic_loss
     def grad(self, X, y):
