@@ -71,8 +71,9 @@ class LogisticRegression(LinearModel):
             print(X.shape)
             #gives a random value to w
             self.w = torch.rand((X.size()[1]))
-        s = X @ self.w
+        s = X @ self.w.double()
         sigma_s = 1 / (1 + torch.exp(-s))
+        print(y)
         logistic_loss = torch.mean(-y * torch.log(sigma_s) - (1 - y) * torch.log(1 - sigma_s))
         return logistic_loss
     def grad(self, X, y):
@@ -89,7 +90,7 @@ class LogisticRegression(LinearModel):
             #sets the value for the weight
             self.w = torch.rand((X.size()[1]))
 
-        s = X @ self.w
+        s = X @ self.w.double()
         sigma_s = 1 / (1 + torch.exp(-s))
         logistic_gradient = torch.mean((sigma_s - y)[:, None] * X, dim = 0)
         gradient_matrix = logistic_gradient[:, None]
