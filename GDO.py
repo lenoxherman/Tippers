@@ -43,7 +43,7 @@ class LinearModel:
         RETURNS: 
             y_hat, torch.Tensor: vector predictions in {0.0, 1.0}. y_hat.size() = (n,)
         """
-        scores = self.score(X)
+        scores = self.score(X).double()
         y_hat = torch.where(scores >= 0, torch.tensor(1.0), torch.tensor(0.0))
         return y_hat
     
