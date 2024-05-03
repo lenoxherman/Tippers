@@ -70,11 +70,10 @@ class LogisticRegression(LinearModel):
         if self.w is None:
             #gives a random value to w
             self.w = torch.rand((X.size()[1])).double()
-
+        print(self.w)
 
         s = X @ self.w.double()
         sigma_s = 1 / (1 + torch.exp(-s))
-        print(y)
         logistic_loss = torch.mean(-y * torch.log(sigma_s) - (1 - y) * torch.log(1 - sigma_s))
         return logistic_loss
     def grad(self, X, y):
@@ -93,7 +92,7 @@ class LogisticRegression(LinearModel):
 
         s = X @ self.w.double()
         sigma_s = 1 / (1 + torch.exp(-s))
-        logistic_gradient = torch.mean((sigma_s - y)[:, None] * X, dim = 0)
+        logistic_gradient = torch.mean((sigma_s - y.T).T * X, dim = 0)
         gradient_matrix = logistic_gradient[:, None]
         return gradient_matrix
     
@@ -122,7 +121,13 @@ class GradientDescentOptimizer:
         if self.old_w is None:
             self.old_w = self.model.w.clone() #setting old_w to be the cloned version of w
         current_w_temp = self.model.w.clone() #getting the current weights
-        self.model.w = self.model.w - self.model.grad(X, y).flatten() * alpha + beta * (self.model.w - self.old_w)
+        self.model.w = (
+            self.model.w 
+            - self.model.grad(X, y).flatten() 
+            * alpha 
+            + beta 
+            * (self.model.w 
+            - self.old_w))
         self.old_w = current_w_temp
 
     def step2(self, X, y, lr = 0.01):
