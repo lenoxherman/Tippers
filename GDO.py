@@ -6,6 +6,7 @@ class LinearModel:
     """
     def __init__(self):
         self.w = None 
+        X = X.double()
 
     def score(self, X):
         """
@@ -24,10 +25,12 @@ class LinearModel:
             s torch.Tensor: vector of scores. s.size() = (n,)
         """
         if self.w is None: 
-            self.w = torch.rand((X.size()[1]))
+            self.w = torch.rand((X.double().size()[1]))
 
         # computing the vector of scores s
-        scores = (X@self.w)
+        print("X: ", X)
+        print("self.w score", self.w)
+        scores = (X.double()@self.w).double()
         return scores
 
     def predict(self, X):
@@ -43,7 +46,7 @@ class LinearModel:
         RETURNS: 
             y_hat, torch.Tensor: vector predictions in {0.0, 1.0}. y_hat.size() = (n,)
         """
-        scores = self.score(X).double()
+        scores = self.score(X.double()).double()
         y_hat = torch.where(scores >= 0, torch.tensor(1.0), torch.tensor(0.0))
         return y_hat
     
@@ -70,9 +73,9 @@ class LogisticRegression(LinearModel):
         if self.w is None:
             #gives a random value to w
             self.w = torch.rand((X.size()[1])).double()
-        print(self.w)
+        print("self.w inside of if statnemt" ,self.w)
 
-        s = X @ self.w.double()
+        s = X.double() @ self.w.double()
         sigma_s = 1 / (1 + torch.exp(-s))
         logistic_loss = torch.mean(-y * torch.log(sigma_s) - (1 - y) * torch.log(1 - sigma_s))
         return logistic_loss
@@ -90,7 +93,7 @@ class LogisticRegression(LinearModel):
             #sets the value for the weight
             self.w = torch.rand((X.size()[1]))
 
-        s = X @ self.w.double()
+        s = X.double() @ self.w.double()
         sigma_s = 1 / (1 + torch.exp(-s))
         logistic_gradient = torch.mean((sigma_s - y.T).T * X, dim = 0)
         gradient_matrix = logistic_gradient[:, None]
