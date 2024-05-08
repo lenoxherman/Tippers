@@ -76,8 +76,12 @@ class LogisticRegression(LinearModel):
         print("self.w inside of if statnemt" ,self.w.double())
 
         s = X.double() @ self.w.double()
+        print('s: ', s)
         sigma_s = 1 / (1 + torch.exp(-s))
+        print('sigma_s:', sigma_s)
+        print('y', y)
         logistic_loss = torch.mean(-y * torch.log(sigma_s) - (1 - y) * torch.log(1 - sigma_s))
+        print('logistic loss:', logistic_loss)
         return logistic_loss
     def grad(self, X, y):
         """
@@ -131,6 +135,7 @@ class GradientDescentOptimizer:
             + beta 
             * (self.model.w 
             - self.old_w))
+        print('step w:', self.model.w)
         self.old_w = current_w_temp
 
     def step2(self, X, y, lr = 0.01):
