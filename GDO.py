@@ -30,7 +30,7 @@ class LinearModel:
         # computing the vector of scores s
         print("X: ", X)
         print("self.w score", self.w)
-        scores = (X.double()@self.w).double()
+        scores = (X.double()@self.w.double())
         return scores
 
     def predict(self, X):
@@ -73,7 +73,7 @@ class LogisticRegression(LinearModel):
         if self.w is None:
             #gives a random value to w
             self.w = torch.rand((X.size()[1])).double()
-        print("self.w inside of if statnemt" ,self.w)
+        print("self.w inside of if statnemt" ,self.w.double())
 
         s = X.double() @ self.w.double()
         sigma_s = 1 / (1 + torch.exp(-s))
